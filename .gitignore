@@ -67,3 +67,6 @@ Carthage/Build/
 # App-specific files
 app.entitlements
 *.plist
+
+# Generated
+Dependencies.generated.swift

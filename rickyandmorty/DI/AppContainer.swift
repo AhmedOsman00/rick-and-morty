@@ -1,40 +1,45 @@
+import Arrow
 import Foundation
 import Networking
+import NetworkingFacade
 import Pager
 import Characters
 import Router
 
 let container = Container.shared
 
-struct AppContainer {
-    @MainActor func assemble() {
-        container.register(HttpClientProtocol.self) { _ in
-            HttpClient(session: URLSession.shared)
-        }
+struct AppContainer: TransientScope {
+  func provideHttpClient() -> HttpClient<APIError> {
+    HttpClient<APIError>()
+  }
 
-        container.register(PagerProtocol.self) {
-            Pager(httpClient: $0.resolved())
-        }
+  func providePager(client: HttpClient<APIError>) -> PagerProtocol {
+    Pager(httpClient: client)
+  }
 
-        container.register(DataDecoder.self) { _ in
-            JSONDecoder()
-        }
+  func provideNavigator() -> Navigator {
+    Navigator()
+  }
 
-        container.register(Navigator.self) { _ in
-            Navigator()
-        }
-
-        container.register(CharacterDetailsFactory.self) { _ in
-            { (model) -> CharacterDetailsViewController in
-                CharacterDetailsViewController(characterUiModel: model)
-            }
-        }
-
-        container.register(CharactersViewController.self) {
-            let dataSource = CharactersRemoteDataSource(pager: $0.resolved(), jsonDecoder: $0.resolved())
-            let viewModel = CharactersViewModel(dataSource: dataSource)
-            let router = CharactersRouter(navigator: $0.resolved(), factory: $0.resolved())
-            return CharactersViewController(viewModel: viewModel, router: router)
-        }
+  func provideCharacterDetailsFactory() -> CharacterDetailsFactory {
+    { (model) -> CharacterDetailsViewController in
+        CharacterDetailsViewController(characterUiModel: model)
     }
+  }
+
+  func provideCharactersRemoteDataSource(pager: PagerProtocol) -> CharactersRemoteDataSourceInterface {
+    CharactersRemoteDataSource(pager: pager, jsonDecoder: JSONDecoder())
+  }
+
+  func provideCharactersViewModel(dataSource: CharactersRemoteDataSourceInterface) -> CharactersViewModel {
+    CharactersViewModel(dataSource: dataSource)
+  }
+
+  func provideCharactersRouter(navigator: Navigator, factory: @escaping CharacterDetailsFactory) -> CharactersRouter {
+    CharactersRouter(navigator: navigator, factory: factory)
+  }
+
+  func provideCharactersViewController(viewModel: CharactersViewModel, router: CharactersRouter) -> CharactersViewController {
+    CharactersViewController(viewModel: viewModel, router: router)
+  }
 }
