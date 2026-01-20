@@ -1,6 +1,4 @@
 import SwiftUI
-import SDWebImageSwiftUI
-import SDWebImage
 import UIExtensions
 
 struct FilterCell: View {
