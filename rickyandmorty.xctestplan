@@ -1,0 +1,44 @@
+{
+  "configurations" : [
+    {
+      "id" : "2DD28953-B5D6-4CB8-A05F-5E6012450EC3",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:rickyandmorty.xcodeproj",
+      "identifier" : "BB6DFC492CCB7C3F00ADB306",
+      "name" : "rickyandmorty"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:rickyandmorty.xcodeproj",
+        "identifier" : "F7D08C372F1C2CF00003D2B5",
+        "name" : "rickyandmortyTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:rickyandmorty\/Characters",
+        "identifier" : "CharactersTests",
+        "name" : "CharactersTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:rickyandmorty\/NetworkingFacade",
+        "identifier" : "NetworkingFacadeTests",
+        "name" : "NetworkingFacadeTests"
+      }
+    }
+  ],
+  "version" : 1
+}
